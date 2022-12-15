@@ -1,18 +1,17 @@
 which kubectl >/dev/null 2>&1 || { echo "Warning: kubectl cli not installed." >&2; exit 0 }
 which fzf >/dev/null 2>&1 || { echo "Warning: fzf not installed." >&2; exit 0 }
 
- modified from __fzf_history__ at https://github.com/junegunn/fzf/blob/master/shell/key-bindings.bash
+# modified from __fzf_history__ at https://github.com/junegunn/fzf/blob/master/shell/key-bindings.bash
 # objective:
 #   - Ctrl-b bound to this function searches aws profile with fzf
 #   - selecting an item returns the profile to the prompt in edit mode
 #   - similar to Ctrl-r doing a history search with fzf
 #   - $ Ctrl-b->pick profile->type aws command->[enter]
-fzf_aws_prof() {
-  AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)
-  echo -n "export AWS_PROFILE=$AWS_PROFILE"
+fzf_kubectl_contexts() {
+  KUBECTL_CONTEXTS=$(kubectl config get-contexts -o=name | fzf)
+  echo -n "kcue $KUBECTL_CONTEXTS"
 }
 
 # Create a ZSH "Widget" and bind to key (CTRL+B here)
-zle -N awsprof fzf_aws_prof
-bindkey '^b' awsprof
-
+zle -N kubecontexts fzf_kubectl_contexts
+bindkey '^k' kubecontexts
