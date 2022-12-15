@@ -9,7 +9,7 @@ which fzf >/dev/null 2>&1 || { echo "Warning: fzf not installed." >&2; exit 0 }
 #   - $ Ctrl-b->pick profile->type aws command->[enter]
 fzf_kubectl_contexts() {
   KUBECTL_CONTEXTS=$(kubectl config get-contexts -o=name | fzf --border)
-  kcue ${KUBECTL_CONTEXTS}
+  ! test -z "${KUBECTL_CONTEXTS}" && kcue ${KUBECTL_CONTEXTS}
 }
 
 # Create a ZSH "Widget" and bind to key (CTRL+B here)
